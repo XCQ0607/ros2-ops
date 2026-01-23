@@ -44,7 +44,7 @@ RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git && \
 # -------------------------------------------------------
 # 【新增步骤】创建与 Jetson 宿主机 UID 一致的用户并配置 sudo
 # -------------------------------------------------------
-ARG USERNAME=jetson
+ARG USERNAME=ros2
 ARG USER_UID=1000
 ARG USER_GID=1000
 

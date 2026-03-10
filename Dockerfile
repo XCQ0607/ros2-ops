@@ -8,6 +8,8 @@ LABEL org.opencontainers.image.description="ROS2 Development Image for Jetson Je
 LABEL org.opencontainers.image.licenses=MIT
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,utility,video
 
 # 1. 安装基础编译工具和 ROS 通信/传感器组件
 # 新增 libopenblas-dev，用于底层加速计算支持
@@ -51,7 +53,7 @@ RUN pip3 install --no-cache-dir --ignore-installed \
 
 # 2.2: 科学计算库
 RUN pip3 install --no-cache-dir --ignore-installed \
-    numpy \
+     "numpy<2.0" \
     pandas \
     scipy \
     matplotlib \
@@ -64,7 +66,7 @@ RUN pip3 install --no-cache-dir --ignore-installed \
 # 使用 Nvidia Jetson AI Lab 官方源，确保安装的是 ARM64 GPU 版，避免后期推理缓慢
 RUN pip3 install --no-cache-dir \
     torch torchvision torchaudio \
-    --extra-index-url https://pypi.jetson-ai-lab.dev/jp6/cu126
+    --index-url https://pypi.jetson-ai-lab.io/jp6/cu126
 
 # 2.4: 巨型 AI 视觉库
 # 此时安装 Ultralytics，pip 会检测到上一层已安装的 GPU 版 torch，不会重复下载 CPU 版本

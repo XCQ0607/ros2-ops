@@ -9,7 +9,7 @@ LABEL org.opencontainers.image.licenses=MIT
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV NVIDIA_VISIBLE_DEVICES all
-ENV NVIDIA_DRIVER_CAPABILITIES compute,utility,video
+ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility,video,graphics,display
 
 # 1. 安装基础编译工具和 ROS 通信/传感器组件
 # 新增 libopenblas-dev，用于底层加速计算支持
@@ -39,7 +39,7 @@ RUN apt-get update && apt-get install -y \
 # ==============================================================================
 
 # 2.1: 轻量级工具和通信依赖
-RUN pip3 install --no-cache-dir --ignore-installed \
+RUN pip3 install --no-cache-dir  \
     jinja2 \
     kconfiglib \
     jsonschema \
@@ -52,7 +52,7 @@ RUN pip3 install --no-cache-dir --ignore-installed \
     termcolor
 
 # 2.2: 科学计算库
-RUN pip3 install --no-cache-dir --ignore-installed \
+RUN pip3 install --no-cache-dir  \
      "numpy<2.0" \
     pandas \
     scipy \
@@ -70,7 +70,7 @@ RUN pip3 install --no-cache-dir \
 
 # 2.4: 巨型 AI 视觉库
 # 此时安装 Ultralytics，pip 会检测到上一层已安装的 GPU 版 torch，不会重复下载 CPU 版本
-RUN pip3 install --no-cache-dir --ignore-installed \
+RUN pip3 install --no-cache-dir \
     lapx \
     supervision \
     ultralytics
@@ -113,6 +113,7 @@ ARG USER_GID=1000
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME -s /bin/bash \
     && usermod -aG sudo $USERNAME \
+    && usermod -aG video $USERNAME \
     && echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 

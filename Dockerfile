@@ -16,7 +16,7 @@ ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility,video,graphics,display
 RUN apt-get update && apt-get install -y \
     ros-humble-rmw-cyclonedds-cpp \
     ros-humble-foxglove-bridge \
-    ros-humble-cv-bridge \
+    #ros-humble-cv-bridge \
     ros-humble-vision-msgs \
     ros-humble-actuator-msgs \
     ros-humble-gps-msgs \
